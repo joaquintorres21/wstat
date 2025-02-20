@@ -39,7 +39,7 @@ def start():
         pass
     dpg.add_window
     with dpg.window(tag="OptWin",label="Settings", pos=[SCR_WIDTH*0.75,10], width=0.2*SCR_WIDTH, height=0.1*SCR_HEIGHT, no_move= True, no_close=True, no_resize=True):
-        nothing()
+        pass
     dpg.create_viewport(title='wstatViewer', clear_color=(50,50,50,0), width=SCR_WIDTH-10, height=SCR_HEIGHT-10)
     dpg.setup_dearpygui()
     dpg.toggle_viewport_fullscreen()
