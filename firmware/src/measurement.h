@@ -37,4 +37,5 @@ void dht_dep(int *property);
 //Returns a floating-point vector v = {humidity; temperature}
 float* dht_convert(dht_data, float*);
 
+//ISR that checks the pin state when in input mode, executed precisely with 28us delay.
 void IRAM_ATTR dht_check(uint8_t* state);
