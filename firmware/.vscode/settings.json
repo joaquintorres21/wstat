@@ -5,6 +5,7 @@
         "socket.h": "c",
         "if.h": "c",
         "gpio.h": "c",
-        "timer.h": "c"
+        "timer.h": "c",
+        "threads.h": "c"
     }
 }

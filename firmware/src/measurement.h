@@ -1,16 +1,21 @@
 #include <stdint.h>
 #include "driver/gpio.h"
+#include "driver/adc.h"
 #include "esp_timer.h"
 #include "freertos/FreeRTOS.h"
 
+#define VCC 5.0 //Nominal supply voltage in volts (V)
 #define LOW 0
 #define HIGH 1
 
 #define BITS_PER_BYTE 8
+#define RES_12BITS 4096 //Max value 2^12 + 2^11 + ... + 2^1 + 1 = 4096
 
 #define DHT_REST_PERIOD 50 //After each bit the sensor rests for 50 microseconds (us)
 #define DHT_AVERAGE 49 //Average between high-level pulse and low-level pulse. Used to measure the gpio level.
 #define DHT_DELTA 21 //Relative DHT_AVERAGE position
+#define DHT_HIGH_TIMEOUT DHT_REST_PERIOD + DHT_DELTA
+#define DHT_LOW_TIMEOUT DHT_HIGH_TIMEOUT + DHT_DELTA 
 
 #define DHT_HOST 1000 //Activation lapse 
 #define DHT22_PULSE 80 //Response sent by the sensor indicating that it's going 
@@ -38,8 +43,6 @@ typedef float mq_data;
 //Manages comms between the controller and sensor, returns raw data
 dht_data dht_get(uint8_t pin);
 
-//Deposits in each one of the dht_data object properties its respective information.
-void dht_dep(int *property);
 
 //Returns a floating-point vector v = {humidity; temperature}
 float* dht_convert(dht_data, float*);

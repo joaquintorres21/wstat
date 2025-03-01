@@ -22,7 +22,7 @@ float* dht_convert(dht_data raw, float* v_2d){
 
 }
 
-dht_data dht_get(uint8_t pin){
+dht_data dht_get(uint8_t dht_pin){
 
     int delay;
     uint8_t sensor_reading = 0;
@@ -50,12 +50,12 @@ dht_data dht_get(uint8_t pin){
     esp_timer_create(&none_timer, &t_none);
 
     //comm between esp and dht
-    gpio_set_direction(PIN_DHT, GPIO_MODE_OUTPUT);
-    gpio_set_level(PIN_DHT, LOW);
+    gpio_set_direction(dht_pin, GPIO_MODE_OUTPUT);
+    gpio_set_level(dht_pin, LOW);
     vTaskDelay(pdMS_TO_TICKS(1000));
-    gpio_set_level(PIN_DHT, HIGH);
+    gpio_set_level(dht_pin, HIGH);
 
-    gpio_set_direction(PIN_DHT, GPIO_MODE_INPUT); //pin is set to floating point voltage to receive data
+    gpio_set_direction(dht_pin, GPIO_MODE_INPUT); //pin is set to floating point voltage to receive data
     esp_timer_start_once(t_get, 40);
     if(sensor_reading != 0) return; //fatal error
     esp_timer_start_once(t_get, 80);
@@ -63,16 +63,23 @@ dht_data dht_get(uint8_t pin){
 
     uint8_t var_index = 0;
     while(significance <= BITS_PER_BYTE){
+
         esp_timer_start_once(t_none, DHT_AVERAGE);
+        
         **(current_variable + var_index) |= (sensor_reading << BITS_PER_BYTE - significance);
-        delay = sensor_reading ? DHT_REST_PERIOD + DHT_DELTA: DHT_REST_PERIOD + 2*DHT_DELTA;
-        esp_timer_start_once(t_get, delay);
+
         significance++;
+        
+        if(sensor_reading) esp_timer_start_once(t_none, DHT_HIGH_TIMEOUT);
+        else esp_timer_start_once(t_none, DHT_LOW_TIMEOUT);
+        
+        //If the position is out of range we go back to 0 until there are no variables left to save.
         if(significance > BITS_PER_BYTE){
             if(var_index == 3) break;
             var_index++;
             significance = 0;
         }
+        
     }
 
     uint16_t sigma = measurement.r_hum + measurement.r_temp + measurement.z_hum + measurement.z_temp;
@@ -81,6 +88,15 @@ dht_data dht_get(uint8_t pin){
 
 }
 
+mq_data mq_get(uint8_t mq_pin){
 
+    uint16_t adc_reading = adc1_get_raw(ADC_CHANNEL_0);
+    float adc_in_volts = VCC * adc_reading / RES_12BITS;
+
+    //calibrar e interpretar voltaje a co2
+    mq_data co2; //= ecuacion desconocida 
+    return co2;
+
+}
 
 
