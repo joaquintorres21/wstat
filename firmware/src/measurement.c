@@ -37,9 +37,9 @@ dht_data dht_get(uint8_t pin){
     gpio_set_level(PIN_DHT, LOW);
     vTaskDelay(pdMS_TO_TICKS(1000));
     gpio_set_level(PIN_DHT, HIGH);
+
     gpio_set_direction(PIN_DHT, GPIO_MODE_INPUT); //pin is set to floating point voltage to receive data
     esp_timer_start_once(t_get, 40);
-
     if(st != 0) return; //fatal error
     esp_timer_start_once(t_get, 80);
     if(st != 1) return; //...

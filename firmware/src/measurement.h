@@ -14,7 +14,7 @@
 #define PIN_DHT 0
 #define PIN_MQ //ADC pin needed
 
-#define ERROR 1
+
 //DHT sends data in 40 bits, with an integer and a decimal part for each variable
 typedef struct {
 
@@ -26,7 +26,8 @@ typedef struct {
 
 } dht_data;
 
-typedef float mq_data; //Floating-point value received from the ADC, which is then converted into an air purity measurement.
+//Floating-point value received from the ADC, which is then converted into an air purity measurement.
+typedef float mq_data; 
 
 //Manages comms between the controller and sensor, returns raw data
 dht_data dht_get(uint8_t pin);
