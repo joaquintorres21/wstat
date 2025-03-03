@@ -40,7 +40,17 @@ def build_pressure(data: int):
 
 def start():
     dpg.create_context()
-    
+
+    with dpg.theme() as global_theme:
+
+        with dpg.theme_component(dpg.mvAll):
+            dpg.add_theme_color(dpg.mvThemeCol_FrameBg, (255, 140, 23), category=dpg.mvThemeCat_Core)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 5, category=dpg.mvThemeCat_Core)
+
+        with dpg.theme_component(dpg.mvInputInt):
+            dpg.add_theme_color(dpg.mvThemeCol_FrameBg, (140, 255, 23), category=dpg.mvThemeCat_Core)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 5, category=dpg.mvThemeCat_Core)
+
     with dpg.font_registry():
     # first argument ids the path to the .ttf or .otf file
         title_font = dpg.add_font("C:\\Users\\Joaquin\\Documents\\GitHub\\wstat\\software\\airstrike.ttf", 20)
