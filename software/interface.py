@@ -9,6 +9,8 @@ SCR_DIM = get_monitors()[0]
 SCR_WIDTH = SCR_DIM.width
 SCR_HEIGHT = SCR_DIM.height
 
+def sum(x): return x+1
+
 def toggle_sensor(sensor_id: int):
     pass
 
@@ -25,31 +27,30 @@ def build_temp(data: list[int]):
     temp = dpg.add_plot(label="Temperatura",
                 parent="DHT", 
                 width=SCR_WIDTH*.2, 
-                height=SCR_HEIGHT*.25)
+                height=SCR_HEIGHT*.25
+                ,no_mouse_pos=True, no_inputs=True)
     hum = dpg.add_plot(
         label="Humedad", 
         parent="DHT", 
         width=SCR_WIDTH*.2, 
-        height=SCR_HEIGHT*.25)
+        height=SCR_HEIGHT*.25,
+        no_mouse_pos=True, no_inputs=True)
 
 def build_co2(data: int):
-    dpg.add_plot(label="CO_2 en el aire", parent="MQ",width=SCR_WIDTH*.2, height=SCR_HEIGHT*.25)
+    dpg.add_plot(label="CO_2 en el aire", parent="MQ",width=SCR_WIDTH*.2, height=SCR_HEIGHT*.25,
+                 no_mouse_pos=True, no_inputs=True)
     
 def build_pressure(data: int):
-    dpg.add_Plot(label="")
+    dpg.add_plot(label="Presión barométrica", parent="BMP",width=SCR_WIDTH*.2, height=SCR_HEIGHT*.25
+                 ,no_mouse_pos=True, no_inputs=True)
+
+def build_status(data: int):
+    dpg.add_text("Consumo total: ", parent="status")
+    dpg.add_text("Memoria en uso:", parent="status")
+    dpg.add_text("Tiempo:", parent="status")
 
 def start():
     dpg.create_context()
-
-    with dpg.theme() as global_theme:
-
-        with dpg.theme_component(dpg.mvAll):
-            dpg.add_theme_color(dpg.mvThemeCol_FrameBg, (255, 140, 23), category=dpg.mvThemeCat_Core)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 5, category=dpg.mvThemeCat_Core)
-
-        with dpg.theme_component(dpg.mvInputInt):
-            dpg.add_theme_color(dpg.mvThemeCol_FrameBg, (140, 255, 23), category=dpg.mvThemeCat_Core)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 5, category=dpg.mvThemeCat_Core)
 
     with dpg.font_registry():
     # first argument ids the path to the .ttf or .otf file
@@ -59,12 +60,27 @@ def start():
         title = dpg.add_text("wstat Viewer", tag="title", pos=[SCR_WIDTH*0.4, 10])
         dpg.bind_item_font(title, title_font)
         pass
-    with dpg.group(tag="DHT", parent="MainWin", horizontal=True,pos=[10,SCR_HEIGHT*0.1]):
+
+    with dpg.group(tag="DHT",
+                   parent="MainWin",
+                   horizontal=True,pos=[10,SCR_HEIGHT*0.1]):
         pass
-    with dpg.group(tag="MQ", parent="MainWin", horizontal=True,pos=[10,SCR_HEIGHT*0.39]):
+    with dpg.group(tag="MQ",
+                   parent="MainWin",
+                   horizontal=True,pos=[10,SCR_HEIGHT*0.39]):
         pass
-    dpg.add_window
-    with dpg.window(tag="OptWin",label="Configuración", pos=[SCR_WIDTH*0.75,SCR_HEIGHT*0.1], width=0.2*SCR_WIDTH, height=0.1*SCR_HEIGHT, no_move= True, no_close=True, no_resize=True):
+    with dpg.group(tag="BMP",
+                   parent="MainWin",
+                   horizontal=True, pos=[290, SCR_HEIGHT*0.39]):
+        pass
+    with dpg.group(tag="status", parent="MainWin", pos=[10, SCR_HEIGHT*0.67]):
+        pass
+
+    with dpg.window(tag="OptWin",
+                    label="Configuración",
+                    pos=[SCR_WIDTH*0.75,SCR_HEIGHT*0.1],
+                    width=0.2*SCR_WIDTH, height=0.1*SCR_HEIGHT,
+                    no_move= True, no_close=True, no_resize=True):
         pass
     dpg.create_viewport(title='wstatViewer', clear_color=(50,50,50,0), width=SCR_WIDTH-10, height=SCR_HEIGHT-10)
     dpg.setup_dearpygui()
@@ -76,6 +92,8 @@ def run(data_from_micro):
     start()
     build_temp({1,2})
     build_co2({1,1})
+    build_pressure({1,1})
+    build_status(1)
     build_settings()
     while dpg.is_dearpygui_running():
         dpg.render_dearpygui_frame()
