@@ -1,57 +1,57 @@
 #include "wstat.h"
 
-void interface(Adafruit_SH1106G screen, meteor_data variables){
+meteor_data construct(dht_data dht_data, mq_data mq_data, bmp_data bmp_data){
     
-    screen.setTextSize(2);
-    screen.println("WSTAT");
+    meteor_data measurements;
+    
+    float tt = bmp_data.temperature*bmp_data.temperature;
+    float hh = dht_data.humidity*dht_data.humidity;
+    float th = bmp_data.temperature*dht_data.humidity;
 
-    screen.setTextSize(1);
-    screen.println("Temperatura:");
-    screen.println("Humedad:");
-    screen.println("Presión:");
-    screen.println("Calidad del aire:");
+    measurements.temperature = bmp_data.temperature;
+    measurements.humidity = dht_data.humidity / 10.0;
 
-    delay(250);
+    measurements.heat_index = hic[0] + hic[1]*measurements.temperature + hic[2]*measurements.humidity + hic[3]*th+ 
+    hic[4]*tt + hic[5]*hh + hic[6]*tt*measurements.humidity + hic[7]*measurements.temperature*hh + hic[8]*tt*hh; 
+    
+    measurements.pressure = bmp_data.pressure;
+    measurements.air_quality = mq_data;
 
+    return measurements;
+    
 }
 
+meteor_data testConstruct(dht_data dht_data){
+    
+    meteor_data measurements;
 
+    measurements.humidity = dht_data.humidity / 10.0;
+    measurements.temperature = dht_data.temperature / 10.0;
 
-//meteor_data measurements(uint8_t dht,uint8_t mq,uint8_t bmpd,uint8_t bmpc){
-//
-//    meteor_data data;
-//    dht_data dht_d = {0,0,0.0,0.0};
-//
-//    float t = dht_d.t;
-//    float h = dht_d.h;
-//    float th = t * h;
-//    float tt = t*t;
-//    float hh = h*h;
-//    float tth = tt*h;
-//    float thh = t*hh;
-//    float tthh = tt*hh;
-//
-//    //Based on empirical equation by USA https://www.wpc.ncep.noaa.gov/html/heatindex_equation.shtml
-//    data.heat_index = hic[0] + hic[1]*t 
-//    + hic[2]*h + hic[3]*th + hic[4]*tt +
-//     hic[5]*hh + hic[6]*tth + hic[7]*thh + hic[8]*tthh; 
-//    
-//    data.temperature = t;
-//    data.humidity = h;
-//    //data.pressure = p;
-//    //data.air_quality = q;
-//
-//     return data;
-//
-//}
+    float tt = measurements.temperature*measurements.temperature;
+    float hh = measurements.humidity*measurements.humidity;
+    float th = measurements.temperature*measurements.humidity;
 
-void testInterface(Adafruit_SH1106G screen, dht_data data){
+    measurements.heat_index = hic[0] + hic[1]*measurements.temperature + hic[2]*measurements.humidity + hic[3]*th+ 
+    hic[4]*tt + hic[5]*hh + hic[6]*tt*measurements.humidity + hic[7]*measurements.temperature*hh + hic[8]*tt*hh; 
+    
+    return measurements;
+}
 
-    screen.setTextSize(2);
-    screen.println("WSTAT");
-    screen.setTextSize(1);
-    screen.printf("Temperatura: %d", data.z_t);
-    screen.printf("\nHumedad: %d", data.z_h);
-    delay(250);
+void interface(Adafruit_SH1106G* display, meteor_data data){
+    
+    (*display).setCursor(0,10);
+
+    (*display).setTextSize(2);
+    (*display).println("# WSTAT #");
+
+    (*display).setTextSize(1);
+    (*display).printf("Temperatura: %.1f}C\\0.1}C", data.temperature);
+    (*display).println("");
+    (*display).printf("Humedad: %.1f/\\0.1/", data.humidity);
+    (*display).println("");
+    (*display).printf("Indice de calor: %.2f}C", data.heat_index);
+    
+    (*display).display();
 
 }

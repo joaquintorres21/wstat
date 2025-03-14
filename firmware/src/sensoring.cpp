@@ -1,7 +1,16 @@
 #include "wstat.h"
 #include "esp_timer.h"
+#include "driver/adc.h"
 
-//Master(ESP) sends signal to slave(DHT)
+uint16_t adc_res(uint16_t i){
+    if(!i) return 1;
+    return pow(2,i-1) + adc_res(i-1);
+}
+
+void begin_adc(uint8_t mq_pin){
+
+}
+
 char dht_comms(uint8_t dht){
     
     pinMode(dht, OUTPUT);
@@ -57,10 +66,28 @@ dht_data dht_get(uint8_t dht){
 
     }
 
-    data.h = (data.z_h << 8) | data.r_h;
-    data.t = (data.z_t << 8) | data.r_t;
-    Serial.printf("%.3f°C\n", data.t / 10.0);
-    Serial.printf("%.3f porciento", data.h / 10.0);
+    data.humidity = (data.z_h << 8) | data.r_h;
+    data.temperature = (data.z_t << 8) | data.r_t;
+
+    return data;
+}
+
+mq_data mq_get(uint8_t adc_pin){
+
+    mq_data data;
+    uint16_t voltage_data = VCC * analogRead(adc_pin);
+    
+    //interpretacion. por ahora data = voltage_data
+    data = voltage_data*1.0 / adc_res(CURRENT_RESOLUTION);
 
     return data;    
+
+}
+
+bmp_data bmp_comms(uint8_t bmp){
+
+}
+
+bmp_data bmp_get(uint8_t bmp){
+
 }
