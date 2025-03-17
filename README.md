@@ -10,7 +10,7 @@ This is a weather station with a HMI vinculated by a socket structure. It measur
 ### BMP280
 ### x3 ≈10nF capacitors
 Used to filter the noise from the sensors signal, making it cleaner. Since $X_C$ = $\frac{1}{2\pi fC}$, for a very high frequency noise it tends to 0Ω, derivating it to GND instead of the MCU.
-### x3 10kΩ 1/4W resistors
+### x4 ≈10kΩ 1/4W resistors
 Conforming a pull-up with DHT22 and the buttons. It can also be used the internal pull-up directives for the ESP32. `pinMode(pin, INPUT_PULLUP)`
 ### x3 buttons
 Interacting with UI and energy consumption.
