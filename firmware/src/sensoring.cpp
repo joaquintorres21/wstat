@@ -1,7 +1,5 @@
-#include "wstat.h"
-#include "esp_timer.h"
-#include "driver/adc.h"
-
+#include <wstat.h>
+#include <Wire.h>
 uint16_t adc_res(uint16_t i){
     if(!i) return 1;
     return pow(2,i-1) + adc_res(i-1);
@@ -99,8 +97,6 @@ mq_data mq_get(uint8_t adc_pin, float r_0){
     
     voltage_data /= 10.0;
     voltage_data *= VCC/4096.0;
-    Serial.printf("%fV\n", voltage_data);
-    //Voltage divisor
     r_s = R_L * (VCC - voltage_data)/voltage_data;
     ratio = r_s / r_0;
 
@@ -109,10 +105,11 @@ mq_data mq_get(uint8_t adc_pin, float r_0){
 
 }
 
-bmp_data bmp_comms(uint8_t bmp){
-
-}
-
-bmp_data bmp_get(uint8_t bmp){
-
-}
+//bmp_data bmp_comms(uint8_t sda, uint8_t scl){
+//    
+//
+//}
+//
+//bmp_data bmp_get(uint8_t bmp){
+//
+//}

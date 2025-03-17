@@ -1,3 +1,8 @@
+/*This is the display font used in the project. Is customized, so it has some special characters
+like an umbrella and percentage, degree, etc. Modified in https://tchapi.github.io/Adafruit-GFX-Font-Customiser/
+and developed by Adafruit (https://www.adafruit.com/)*/
+
+
 #pragma once
 #include <Adafruit_GFX.h>
 
