@@ -9,7 +9,7 @@ This is a weather station with a HMI vinculated by a socket structure. It measur
 ### DHT22
 ### BMP280
 ### x3 ≈10nF capacitors
-Used to filter the noise from the sensors signal, making it cleaner. $\frac{1,2\pifC}
+Used to filter the noise from the sensors signal, making it cleaner. $\frac{1,2\pifC}$
 ### x3 10kΩ 1/4W resistors
 ### x3 buttons
 ### 
