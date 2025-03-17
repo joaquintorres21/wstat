@@ -24,6 +24,7 @@ Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 
 
 dht_data dht_d;
 mq_data mq_d;
+float mq_r;
 meteor_data data;
 
 float temp, hr, heat_index;
@@ -47,11 +48,21 @@ void setup(){
 void loop() {
 
     dht_d = dht_get(DHT);
-    data = testConstruct(dht_d);
-    mq_d = mq_get(MQ);
-    Serial.printf("MQ135: %.3f", mq_d);
+    
+    mq_r = mq_calibrate(MQ);
+    //mq_r = 21.686;
+
+    mq_d = mq_get(MQ,80.0);
+    data.co2 = mq_d;
+
+    data = construct(dht_d, mq_d, {dht_d.temperature,0});
+    
+    Serial.printf("R_0 = %.3fkOhm", mq_r);
     Serial.println("");
-    interface(&display, data);
+    Serial.printf("MQ135: %.3fppm de CO2", mq_d);
+    Serial.println("");
+    Serial.println("");
+    interface(&display, data, mq_r);
     delay(10000);
     display.clearDisplay();
 

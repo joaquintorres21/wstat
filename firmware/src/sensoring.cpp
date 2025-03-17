@@ -17,7 +17,7 @@ char dht_comms(uint8_t dht){
     GPIO.out_w1tc = (1 << dht);
 
     delayMicroseconds(1500);
-    pinMode(dht, INPUT_PULLUP);
+    pinMode(dht, INPUT);
 
     //Here the sensor should send a 0 to the MCU.
     while((((GPIO.in & (1 << dht)) >> dht) & 1));
@@ -72,15 +72,40 @@ dht_data dht_get(uint8_t dht){
     return data;
 }
 
-mq_data mq_get(uint8_t adc_pin){
-
-    mq_data data;
-    uint16_t voltage_data = VCC * analogRead(adc_pin);
+//Use on an environment with 400ppm CO2. Then put the value as second arg in mq_get
+float mq_calibrate(uint8_t adc_pin){
+    float voltage_data;
+    int resolution = adc_res(CURRENT_RESOLUTION);
+    //Sensor internal resistance during a certain measurement.
+    float r_0;
     
-    //interpretacion. por ahora data = voltage_data
-    data = voltage_data*1.0 / adc_res(CURRENT_RESOLUTION);
+    for(int i = 0; i < 25; i++) voltage_data += (float) analogRead(adc_pin);
+    voltage_data /= 25.0;
+    voltage_data *= VCC / resolution;
+    r_0 =  ((float)R_L * (VCC - voltage_data)/voltage_data);
 
-    return data;    
+    return r_0;
+}
+
+mq_data mq_get(uint8_t adc_pin, float r_0){
+
+    mq_data voltage_data = 0.0;
+    int resolution = adc_res(CURRENT_RESOLUTION);
+
+    //Sensor internal resistance during a certain measurement.
+    float r_s, ratio;
+    
+    for(int i = 0; i < 10; i++) voltage_data += (float) analogRead(adc_pin);
+    
+    voltage_data /= 10.0;
+    voltage_data *= VCC/4096.0;
+    Serial.printf("%fV\n", voltage_data);
+    //Voltage divisor
+    r_s = R_L * (VCC - voltage_data)/voltage_data;
+    ratio = r_s / r_0;
+
+    voltage_data = co_2[0] * pow(ratio, co_2[1]);
+    return voltage_data;
 
 }
 
