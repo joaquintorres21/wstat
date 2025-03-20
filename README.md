@@ -14,4 +14,5 @@ Used to filter the noise from the sensors signal.
 Conforming a pull-up with DHT22 and the buttons. It can also be used the internal pull-up directives for the ESP32. `pinMode(pin, INPUT_PULLUP)`
 ### x3 buttons
 Interacting with UI and energy consumption.
-### x2
+### x2 Hall Sensor
+### x3 Neodymium magnet
