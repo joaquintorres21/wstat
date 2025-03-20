@@ -3,7 +3,4 @@ in the project. */
 
 #include <wtypes.h>
 
-state_t next(state_t*global,uint8_t button);
-state_t prev(state_t*global,uint8_t button);
-state_t chill(state_t*global,uint8_t button);
-
+state_t state_var(state_t*global,uint8_t button);

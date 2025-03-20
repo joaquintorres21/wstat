@@ -99,7 +99,8 @@ mq_data mq_get(uint8_t adc_pin, float r_0){
     voltage_data *= VCC/4096.0;
     r_s = R_L * (VCC - voltage_data)/voltage_data;
     ratio = r_s / r_0;
-
+    
+    //Exponential adjustment to the measurements.
     voltage_data = co_2[0] * pow(ratio, co_2[1]);
     return voltage_data;
 

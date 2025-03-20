@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 //Refeers to a state type, depends on the selected page.
-typedef char state_t;
+typedef signed char state_t;
 
 //DHT22 sends data in 40 bits, each byte represents integer and decimal part of each measured variable.
 //Fifth byte represents checksum, where z_h + z_t + r_h + r_t should be equal to it.

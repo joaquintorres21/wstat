@@ -13,8 +13,12 @@
 #define SCREEN_HEIGHT 64
 #define OLED_RESET -1
 
-//Writes data in the pointed display.
-void interface(Adafruit_SH1106G*, meteor_data);
 
-void write_page(Adafruit_SH1106G*, meteor_data, state_t);
+void build(Adafruit_SH1106G*, GFXfont*, int color);
+
+//Writes data in the pointed display.
+void interface(Adafruit_SH1106G&, meteor_data, state_t);
+
+//Writes the current page based on the state variable. Called during interface(...)
+void write_page(Adafruit_SH1106G&, meteor_data, state_t);
 

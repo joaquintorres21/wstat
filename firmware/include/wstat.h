@@ -29,9 +29,6 @@ const float co_2[2] = {
     -2.769
 };
 
-//Converts to Fahrenheit a Celsius input. 
-float to_fahrenheit(float grade_in_c) {return grade_in_c*1.8+32;}
-
 //Returns resistance R_0 that is R_s when measured in a room with 400ppm of CO2.
 float mq_calibrate(uint8_t mq_pin);
 
