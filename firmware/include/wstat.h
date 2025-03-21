@@ -6,6 +6,11 @@
 #define CURRENT_RESOLUTION 12 //Bits
 #define MU_TO_MINUS_ONE 9999 //High value
 
+#define BMP_ID 0xD0
+#define BMP_PRESSURE 0xF7
+#define BMP_TEMPERATURE 0xFA
+#define BMP_CONFIG 0xF4
+
 //MQ 135 Load SMD resistance. 203 = 20E3 = 20K. Precisely measured with multimeter.
 const float R_L = 19.6;
 

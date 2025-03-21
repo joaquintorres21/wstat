@@ -1,5 +1,6 @@
 #include <wstat.h>
 #include <Wire.h>
+
 uint16_t adc_res(uint16_t i){
     if(!i) return 1;
     return pow(2,i-1) + adc_res(i-1);
@@ -106,11 +107,33 @@ mq_data mq_get(uint8_t adc_pin, float r_0){
 
 }
 
-//bmp_data bmp_comms(uint8_t sda, uint8_t scl){
-//    
-//
-//}
-//
-//bmp_data bmp_get(uint8_t bmp){
-//
-//}
+
+bmp_data bmp_get(uint8_t bmp_add){
+    
+    bmp_data data;
+    char bytes;
+    uint8_t temp_msb, temp_lsb, pres_msb, pres_mb, pres_lsb;
+
+    Wire.beginTransmission(bmp_add);
+    Wire.write(BMP_PRESSURE);
+    Wire.endTransmission();
+    
+    Wire.requestFrom(bmp_add, 3);
+    pres_msb = Wire.read();
+    pres_mb = Wire.read();
+    pres_lsb = Wire.read();
+
+    Wire.beginTransmission(bmp_add);
+    Wire.write(BMP_TEMPERATURE);
+    Wire.endTransmission();
+
+    Wire.requestFrom(bmp_add, 2);
+    temp_msb = Wire.read();
+    temp_lsb = Wire.read();
+    
+    data.pressure = ((uint32_t)pres_msb << 12) | ((uint32_t)pres_mb << 4) | (pres_lsb >> 4);
+    data.temperature = (temp_msb << 8) | temp_lsb;
+
+    return data;
+
+}
