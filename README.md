@@ -6,6 +6,7 @@ This is a weather station with a desktop software vinculated by a socket structu
 ## Testing components
 
 ### NodeMCU ESP32
+The development board
 ### MQ-135
 Measuring CO2 concentration from a known air measure.
 ### DHT22
