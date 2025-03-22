@@ -14,7 +14,7 @@ Measures temperature and RH in 40 bits sent in series.
 ### BMP280
 Measures pressure and temperature by [piezoresistive effect](https://en.m.wikipedia.org/wiki/Piezoresistive_effect).
 ### x6 ≈10nF capacitors
-Used to [filter](https://en.m.wikipedia.org/wiki/Low-pass_filter) the noise from the sensors signal/user inputs.
+Used to filter^[1](https://en.m.wikipedia.org/wiki/Low-pass_filter) the noise from the sensors signal/user inputs.
 ### x4 ≈10kΩ 1/4W resistors
 Conforming a pull-up with DHT22 and buttons.
 ### x1 DISPLAY OLED 1.3' 128x64
