@@ -12,11 +12,11 @@ Measuring CO2 concentration from a known air measure.
 ### DHT22
 Measures temperature and RH in 40 bits sent in series.
 ### BMP280
-Measures pressure and temperature by piezoresistive effect<sup>[2](https://en.m.wikipedia.org/wiki/Piezoresistive_effect)</sup>.
+Measures pressure and temperature by piezoresistive effect<sup>[1](https://en.m.wikipedia.org/wiki/Piezoresistive_effect)</sup>.
 ### x6 ≈10nF capacitors
 Used to filter<sup>[2](https://en.m.wikipedia.org/wiki/Low-pass_filter)</sup> the noise from the sensors signal/user inputs.
 ### x4 ≈10kΩ 1/4W resistors
-Conforming a pull-up with DHT22 and buttons.
+Conforming a pull-up<sup>[3](https://es.m.wikipedia.org/wiki/Pull-up)</sup>with DHT22 and buttons.
 ### x1 DISPLAY OLED 1.3' 128x64
 To display the measurements from the device itself.
 ### x4 buttons
