@@ -12,7 +12,7 @@ Measuring CO2 concentration from a known air measure.
 ### DHT22
 Measures temperature and RH in 40 bits sent in series.
 ### BMP280
-Measures pressure and temperature in a high resolution (20 bits ADC)
+Measures pressure and temperature by [piezoresistive effect](https://en.m.wikipedia.org/wiki/Piezoresistive_effect)
 ### x6 ≈10nF capacitors
 Used to filter the noise from the sensors signal/user inputs.
 ### x4 ≈10kΩ 1/4W resistors
@@ -21,7 +21,7 @@ Conforming a pull-up with DHT22 and buttons.
 To display the measurements from the device itself.
 ### x4 buttons
 Interacting with UI and energy consumption.
-### x1 Hall Sensor
+### x1 Hall Effect Sensor
 For wind strength measurement.
 ### x3 Neodymium magnet
 For wind strength measurement.
