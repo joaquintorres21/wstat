@@ -13,6 +13,10 @@ Measuring CO2 concentration from a known air measure.
 Measures temperature and RH in 40 bits sent in series.
 ### BMP280
 Measures pressure and temperature by piezoresistive effect<sup>[1](https://en.m.wikipedia.org/wiki/Piezoresistive_effect)</sup>.
+### x1 Hall Effect<sup>[3](https://en.m.wikipedia.org/wiki/Hall_effect)</sup> Sensor
+For wind strength measurement.
+### x3 Neodymium magnet
+For wind strength measurement.
 ### x6 ≈10nF capacitors
 Used to filter<sup>[2](https://en.m.wikipedia.org/wiki/Low-pass_filter)</sup> the noise from the sensors signal/user inputs.
 ### x4 ≈10kΩ 1/4W resistors
@@ -21,7 +25,3 @@ Conforming a pull-up with DHT22 and buttons.
 To display the measurements from the device itself.
 ### x4 buttons
 Interacting with UI and energy consumption.
-### x1 Hall Effect<sup>[3](https://en.m.wikipedia.org/wiki/Hall_effect)</sup> Sensor
-For wind strength measurement.
-### x3 Neodymium magnet
-For wind strength measurement.
