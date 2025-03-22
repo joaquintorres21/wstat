@@ -13,10 +13,10 @@ Measuring CO2 concentration from a known air measure.
 Measures temperature and RH in 40 bits sent in series.
 ### BMP280
 Measures pressure and temperature in a high resolution (20 bits ADC)
-### x4 ≈10nF capacitors
-Used to filter the noise from the sensors signal.
-### x5 ≈10kΩ 1/4W resistors
-Conforming a pull-up with DHT22 and the buttons. It can also be used the internal pull-up directives for the ESP32. `pinMode(pin, INPUT_PULLUP)`
+### x6 ≈10nF capacitors
+Used to filter the noise from the sensors signal/user inputs.
+### x4 ≈10kΩ 1/4W resistors
+Conforming a pull-up with DHT22 and buttons.
 ### x1 DISPLAY OLED 1.3' 128x64
 To display the measurements from the device itself.
 ### x4 buttons
