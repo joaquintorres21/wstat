@@ -1,18 +1,27 @@
-# wstat (Cheap homemade weather station)
+(currently in development)
+# wstat
 
-This is a weather station with a HMI vinculated by a socket structure. It measures temperature, humidity, pressure, CO2 in air, wind strength/direction. Developed over ESP32 with [Arduino](https://docs.arduino.cc/) framework. The Desktop software is written in Python, using [Dear PyGui](https://dearpygui.readthedocs.io/en/latest/) package.
+This is a weather station with a desktop software vinculated by a socket structure. It measures temperature, humidity, pressure, CO2 in air, wind strength/direction. Developed over ESP32 with [Arduino](https://docs.arduino.cc/) framework. The Desktop software is written in Python, using [Dear PyGui](https://dearpygui.readthedocs.io/en/latest/) package.
 
-## Hardware
+## Testing/Prototype components
 
 ### NodeMCU ESP32
+The development board, data processing/sending.
 ### MQ-135
+Measuring CO2 concentration from a known air measure.
 ### DHT22
+Measures temperature and RH in 40 bits sent in series.
 ### BMP280
-### x3 ≈10nF capacitors
-Used to filter the noise from the sensors signal.
-### x4 ≈10kΩ 1/4W resistors
-Conforming a pull-up with DHT22 and the buttons. It can also be used the internal pull-up directives for the ESP32. `pinMode(pin, INPUT_PULLUP)`
-### x3 buttons
-Interacting with UI and energy consumption.
-### x2 Hall Sensor
+Measures pressure and temperature by piezoresistive effect<sup>[1](https://en.m.wikipedia.org/wiki/Piezoresistive_effect)</sup>.
 ### x3 Neodymium magnet
+For wind strength measurement.
+### x1 Hall Effect<sup>[2](https://en.m.wikipedia.org/wiki/Hall_effect)</sup> Sensor
+For wind strength measurement.
+### x6 ≈10nF capacitors
+Used to filter<sup>[3](https://en.m.wikipedia.org/wiki/Low-pass_filter)</sup> the noise from the sensors signal/user inputs.
+### x4 ≈10kΩ 1/4W resistors
+Conforming a pull-up with DHT22 and buttons.
+### x1 DISPLAY OLED 1.3' 128x64
+To display the measurements from the device itself.
+### x4 buttons
+Interacting with UI and energy consumption.
