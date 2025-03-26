@@ -1,7 +1,7 @@
 (currently in development)
 # wstat
 
-This is a weather station connected to a DB. It measures temperature, humidity, pressure, CO2 in air, wind strength/direction. Developed over ESP32 with [Arduino](https://docs.arduino.cc/) framework.
+This is a weather station that sends data to my PC. It measures temperature, humidity, pressure, CO2 in air, wind strength/direction. Developed over ESP32 with [Arduino](https://docs.arduino.cc/) framework.
 
 ## Testing/Prototype components
 
