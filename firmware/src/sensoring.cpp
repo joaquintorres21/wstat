@@ -1,13 +1,10 @@
 #include <wstat.h>
 #include <Wire.h>
+#include <HardwareSerial.h>
 
 uint16_t adc_res(uint16_t i){
     if(!i) return 1;
     return pow(2,i-1) + adc_res(i-1);
-}
-
-void begin_adc(uint8_t mq_pin){
-
 }
 
 char dht_comms(uint8_t dht){
@@ -108,7 +105,7 @@ mq_data mq_get(uint8_t adc_pin, float r_0){
 }
 
 
-bmp_data bmp_get(uint8_t bmp_add){
+bmp_data bmp_get(uint16_t bmp_add){
     
     bmp_data data;
     char bytes;
@@ -117,12 +114,12 @@ bmp_data bmp_get(uint8_t bmp_add){
     Wire.beginTransmission(bmp_add);
     Wire.write(BMP_PRESSURE);
     Wire.endTransmission();
-    
+
     Wire.requestFrom(bmp_add, 3);
     pres_msb = Wire.read();
     pres_mb = Wire.read();
     pres_lsb = Wire.read();
-
+    
     Wire.beginTransmission(bmp_add);
     Wire.write(BMP_TEMPERATURE);
     Wire.endTransmission();
@@ -130,10 +127,71 @@ bmp_data bmp_get(uint8_t bmp_add){
     Wire.requestFrom(bmp_add, 2);
     temp_msb = Wire.read();
     temp_lsb = Wire.read();
-    
+
+
+    //Raw data. Needs to be calibrated with internal parameters dig_t(n) / dig_p(n)
     data.pressure = ((uint32_t)pres_msb << 12) | ((uint32_t)pres_mb << 4) | (pres_lsb >> 4);
     data.temperature = (temp_msb << 8) | temp_lsb;
 
     return data;
 
+}
+
+//Intended to be executed just once since they are constants
+bmp_const bmp_parameters(uint16_t bmp_add){
+    
+    bmp_const parameters;
+
+    Wire.beginTransmission(bmp_add);
+    Wire.write(0x88);
+    Wire.endTransmission();
+
+    Wire.requestFrom(bmp_add, 24);
+    parameters.dig_T1 = Wire.read() | (Wire.read() << 8);
+    parameters.dig_T2 = (int16_t)(Wire.read() | (Wire.read() << 8));
+    parameters.dig_T3 = (int16_t)(Wire.read() | (Wire.read() << 8));
+    parameters.dig_P1 = Wire.read() | (Wire.read() << 8);
+    parameters.dig_P2 = (int16_t)(Wire.read() | (Wire.read() << 8));
+    parameters.dig_P3 = (int16_t)(Wire.read() | (Wire.read() << 8));
+    parameters.dig_P4 = (int16_t)(Wire.read() | (Wire.read() << 8));
+    parameters.dig_P5 = (int16_t)(Wire.read() | (Wire.read() << 8));
+    parameters.dig_P6 = (int16_t)(Wire.read() | (Wire.read() << 8));
+    parameters.dig_P7 = (int16_t)(Wire.read() | (Wire.read() << 8));
+    parameters.dig_P8 = (int16_t)(Wire.read() | (Wire.read() << 8));
+    parameters.dig_P9 = (int16_t)(Wire.read() | (Wire.read() << 8));
+    
+    return parameters;
+
+}
+
+bmp_data bmp_process(bmp_data& raw, bmp_const param){
+    
+    int32_t adjt_1, adjt_2;
+    int64_t adjp_1, adjp_2, p;
+    adjt_1 = (((raw.temperature >> 3) - ((int32_t)param.dig_T1<<1))) * ((int32_t)param.dig_T2) >> 11;
+    adjt_2 = (((((raw.temperature >> 4) - ((int32_t)param.dig_T1)) * ((raw.temperature >> 4) - ((int32_t)param.dig_T1))) >> 12) * 
+    ((int32_t)param.dig_T3)) >> 14;
+
+    raw.temperature = (((adjt_1 + adjt_2) * 5 + 128) >> 8) / 1000;
+
+    adjp_1 = ((int64_t)adjt_1+adjt_2) - 128000;
+    adjp_2 = adjp_1 * adjp_1 * (int64_t)param.dig_P6;
+    adjp_2 += ((adjp_1*(int64_t)param.dig_P5)<<17);
+    adjp_2 += ((int64_t)param.dig_P4<<35);
+    adjp_1 = ((adjp_1*adjp_1*(int64_t)param.dig_P3)>>8) + ((adjp_1 * (int64_t)param.dig_P2)<<12);
+    adjp_1 = (((((int64_t)1)<<47)+adjp_1)) * ((int64_t)param.dig_P1)>>33;
+
+    if(!adjp_1){
+        return raw;
+    }
+    p = 1048576 - raw.pressure;
+    p = (((p<<31)-adjp_2)*3125) / adjp_1;
+    adjp_1 = (((int64_t)param.dig_P9) * (p>>13) * (p >> 13)) >> 25;
+    adjp_2 = (((int64_t)param.dig_P8) * p) >> 19;
+    p = ((p + adjp_1 + adjp_2)>> 8) + (((int64_t)param.dig_P7)<<4);
+    
+    raw.pressure = (uint32_t)p / 25600;
+    
+    return raw;
+    
 }

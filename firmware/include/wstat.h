@@ -44,7 +44,13 @@ dht_data dht_get(uint8_t dht_pin);
 mq_data mq_get(uint8_t mq_pin, float r_0);
 
 //Returns bmp_data type
-bmp_data bmp_get(uint8_t bmp_pin);
+bmp_data bmp_get(uint16_t bmp_dir);
+
+
+bmp_const bmp_parameters(uint16_t);
+
+
+bmp_data bmp_process(bmp_data&, bmp_const);
 
 //Generates data received by display and HMI.
 meteor_data construct(dht_data, mq_data, bmp_data);

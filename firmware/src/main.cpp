@@ -10,19 +10,13 @@ Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 
 #define BMP_SDA 21 //I2C comms
 #define BMP_CLK 22
 
-#define BMP_ADD 0x77
+#define BMP_ADD 0x76
 
-#define NEXT 1
-#define PREV 0
-#define CHILL -1
-
-#define PREV 4
-#define NEXT 5
-#define OK 15
 
 dht_data dht_d;
 mq_data mq_d;
 bmp_data bmp_d;
+bmp_const bmp_param;
 meteor_data data;
 //checking r_0
 float mq_r;
@@ -45,12 +39,18 @@ void setup(){
     display.setTextColor(SH110X_WHITE);
     display.setFont(&Org_01);
     display.clearDisplay();
+
+    Wire.beginTransmission(BMP_ADD);
+    Wire.write(0xF4);
+    Wire.write(0x27);
+    Wire.endTransmission();
+
+    bmp_param = bmp_parameters(BMP_ADD);
+    
     
 }
 
 void loop() {
-
-    
 
     dht_d = dht_get(DHT);
     //mq_r = 21.686;
@@ -62,8 +62,13 @@ void loop() {
     //lo que hago es, en base a una mezcla conocida, medir variaciones de co2 y por regresion formar una curva que represente la variacion
     //de la relacion rs/ro a medida que crece la concentracion de dicho gas
     
-    bmp_d = bmp_get(BMP_ADD);
+    bmp_d = bmp_get((uint16_t)BMP_ADD);
 
+    delay(500);
+
+    bmp_d = bmp_process(bmp_d, bmp_param);
+
+    Serial.printf("T: %d P:%dhPa\n",bmp_d.temperature, bmp_d.pressure);
     mq_d = mq_get(MQ,30.0);
         
     data.co2 = mq_d;
@@ -74,19 +79,4 @@ void loop() {
     delay(10000);
     display.clearDisplay();
 
-}
-
-//Developing
-void update(){
-
-    if(!digitalRead(NEXT)){
-        global_state++;
-    }
-    if(!digitalRead(PREV)){
-        global_state--;
-    }
-    if(!digitalRead(OK)){
-        global_state=-1;
-    }
-    
 }
