@@ -1,7 +1,7 @@
 (currently in development)
 # wstat
 
-This is a weather station with a desktop software vinculated by a socket structure. It measures temperature, humidity, pressure, CO2 in air, wind strength/direction. Developed over ESP32 with [Arduino](https://docs.arduino.cc/) framework. The Desktop software is written in Python, using [Dear PyGui](https://dearpygui.readthedocs.io/en/latest/) package.
+This is a weather station connected to a DB. It measures temperature, humidity, pressure, CO2 in air, wind strength/direction. Developed over ESP32 with [Arduino](https://docs.arduino.cc/) framework.
 
 ## Testing/Prototype components
 
