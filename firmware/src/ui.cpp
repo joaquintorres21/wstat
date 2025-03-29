@@ -24,13 +24,7 @@ void interface(Adafruit_SH1106G& display, meteor_data data, state_t global){
 void write_page(Adafruit_SH1106G& display, meteor_data data, state_t global){
     
     switch(global){
-        
-        case -1:
-        display.printf("IP: %d.%d.%d.%d\n");
-        display.printf("Port: %d");
-        display.printf("Tiempo %d:%d");
-        break;
-        
+
         case 0: 
         display.printf("Temperatura: %.1f}C\\0.1}C\n", data.temperature);
         display.printf("Humedad: %.1f/\\0.1/\n", data.humidity);
@@ -40,10 +34,24 @@ void write_page(Adafruit_SH1106G& display, meteor_data data, state_t global){
         break;
 
         case 1: 
-        display.printf("Presion: %funidad\n", data.pressure);
-        display.printf("R_S[MQ135]: fkOhm\n");
-        display.printf("Consumo: fmA\n");
+        display.printf("Presion: %fPa\n", data.pressure);
+        display.printf("Viento: fkm/h\n");
+        display.printf("Viento: f}[dir]\n");
+        display.printf("Punto de rocio: f\n");
         break;
         
+        case 2:
+        display.printf("Altitud: fm\n");
+        display.printf("Densidad del aire: fg/cm3\n");
+        display.printf("Evapotranspiracion: f\n");
+        display.printf("Altura de las nubes: fm\n");
+        break;
+
+        case 3:
+        display.printf("Temperatura eq. pot.: f}\n");
+        display.printf("Humedad especifica: f\n");
+        display.printf("Humidex: f\n");
+        display.printf("Flujo de calor sensible: f\n");
+        break;
     }
 }

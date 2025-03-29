@@ -22,3 +22,15 @@ meteor_data construct(dht_data dht_data, mq_data mq_data, bmp_data bmp_data){
     return measurements;
     
 }
+
+uint8_t wifi_setup(char* ssid, char* wpa){
+    
+    WiFi.begin(ssid, wpa);
+    uint64_t t0 = esp_timer_get_time();
+    while(WiFi.status() != WL_CONNECTED){
+        if(esp_timer_get_time()-t0 > 1E7) return WiFi.status();
+    };
+    return 0;
+
+}
+

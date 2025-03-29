@@ -181,9 +181,8 @@ bmp_data bmp_process(bmp_data& raw, bmp_const param){
     adjp_1 = ((adjp_1*adjp_1*(int64_t)param.dig_P3)>>8) + ((adjp_1 * (int64_t)param.dig_P2)<<12);
     adjp_1 = (((((int64_t)1)<<47)+adjp_1)) * ((int64_t)param.dig_P1)>>33;
 
-    if(!adjp_1){
-        return raw;
-    }
+    if(!adjp_1) return raw;
+    
     p = 1048576 - raw.pressure;
     p = (((p<<31)-adjp_2)*3125) / adjp_1;
     adjp_1 = (((int64_t)param.dig_P9) * (p>>13) * (p >> 13)) >> 25;
