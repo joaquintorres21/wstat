@@ -17,11 +17,11 @@ Measures pressure and temperature by piezoresistive effect<sup>[1](https://en.m.
 For wind strength measurement.
 ### x1 Hall Effect<sup>[2](https://en.m.wikipedia.org/wiki/Hall_effect)</sup> Sensor
 For wind strength measurement.
-### x6 ≈10nF capacitors
+### x5 ≈10nF capacitors
 Used to filter<sup>[3](https://en.m.wikipedia.org/wiki/Low-pass_filter)</sup> the noise from the sensors signal/user inputs.
 ### x4 ≈10kΩ 1/4W resistors
 Conforming a pull-up with DHT22 and buttons.
 ### x1 DISPLAY OLED 1.3' 128x64
 To display the measurements from the device itself.
-### x4 buttons
+### x2 buttons
 Interacting with UI and energy consumption.
