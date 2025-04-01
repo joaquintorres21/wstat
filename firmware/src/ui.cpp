@@ -1,8 +1,7 @@
 #include <controller.h>
 #include <display.h>
 
-
-void interface(Adafruit_SH1106G& display, meteor_data data, state_t global){
+void interface(Adafruit_SH1106G& display, meteor_data data, state_t global, state_t chill){
     
     char calibrating_mq = 1;
     double t_minus;
@@ -11,6 +10,9 @@ void interface(Adafruit_SH1106G& display, meteor_data data, state_t global){
     display.setTextSize(2);
     display.println("# WSTAT #");
     display.setTextSize(1);
+
+    if(chill) display.setContrast(127);
+    else display.setContrast(255);
 
     write_page(display, data, global);
 
