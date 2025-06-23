@@ -2,11 +2,6 @@
 #include <Wire.h>
 #include <HardwareSerial.h>
 
-uint16_t adc_res(uint16_t i){
-    if(!i) return 1;
-    return pow(2,i-1) + adc_res(i-1);
-}
-
 char dht_comms(uint8_t dht){
     
     pinMode(dht, OUTPUT);
