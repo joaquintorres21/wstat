@@ -1,8 +1,0 @@
-{
-    "cmake.sourceDirectory": "C:/Users/Joaquin/Documents/GitHub/wstat/firmware/src",
-    "files.associations": {
-        "measurement.h": "c",
-        "stdint.h": "c",
-        "bsdtypes.h": "c"
-    }
-}
